@@ -4,13 +4,36 @@
   }
   
 .buttons {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
+  margin: auto;
+  position: inherit;
+  top: 75%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.game-button {
+  width: 150px;
+  height: 200px;
+  background-image: url('./paper.png');
+
+}
+
+
+
+img{
+  width: 100%;
+}
+
+.game-button {
+  border-radius: 10px;
+  font-size: 30px;
+  background-color: white;
+}
+
+h2 {
+  text-align: center;
+}
 
 #button {
     position: absolute;

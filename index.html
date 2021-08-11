@@ -11,15 +11,34 @@
 <body>
     <div class="container">
         <div class="buttons">
-            <button id="Rock">Rock</button>
-            <button id="Paper">Paper</button>
-            <button id="Scissors">Scissors</button>
+            <div class="player-box">
+                <h2>PLAYER</h2>
+                <div class="game-buttons">
+                    <button class="game-button" id="Rock">
+                    </button>
+                    <button class="game-button" id="Paper">
+                    </button>
+                    <button class="game-button" id="Scissors">
+                    </button>
+                </div>
+            </div>
+            <div class="computer-box">
+                <h2>COMPUTER</h2>
+                <div class="game-buttons">
+                    <button class="game-button" id="computer-Rock">
+                    </button>
+                    <button class="game-button" id="computer-Paper">
+                    </button>
+                    <button class="game-button" id="computer-Scissors">
+                    </button>
+                </div>
+            </div>
         </div>
-    <div class="results">
-        <div class="result-sentence"></div>
-        <div class="score" id="player" data-points=0>Player Score: 0</div>
-        <div class="score" id="computer" data-points=0>Computer Score: 0</div>
-    </div>
+        <div class="results">
+            <div class="result-sentence"></div>
+            <div class="score" id="player" data-points=0>Player Score: 0</div>
+            <div class="score" id="computer" data-points=0>Computer Score: 0</div>
+        </div>
     </div>
 </body>
 
