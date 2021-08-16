@@ -4,6 +4,60 @@
         <title>
             Rock, Paper, Scissors
         </title>
+        <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
     </head>
-    <script src="rock-paper-scissors.js"></script>
+    <script type="module" src="rock-paper-scissors.js" defer></script>
+
+
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <div class="container">
+        <div class="results">
+            <div class="score" id="player" data-points=0>Player: 0</div>
+            <div class="score" id="computer" data-points=0>Computer: 0</div>
+        </div>
+        <div class="buttons">
+            <div class="player-box">
+                <h2 id="player-title">PLAYER</h2>
+                <div class="image-div">
+                    <img class="player-image" src="./images/playerNormal.jpg" alt="playerImage" />
+                </div>  
+                <div class="game-buttons">
+                    <button class="game-button rock" id="Rock">
+                    </button>
+                    <button class="game-button paper" id="Paper">
+                    </button>
+                    <button class="game-button scissors" id="Scissors">
+                    </button>
+                </div>
+            </div>
+            <div class="computer-box">
+                <h2 id="computer-title">COMPUTER</h2>
+                <div class="image-div">
+                    <img class="robot-image" src="./images/robotNormal.png" alt="robotImage" />
+                </div>
+                <div class="game-buttons">
+                    <button class="computer game-button rock" id="computer-Rock">
+                    </button>
+                    <button class="computer game-button paper" id="computer-Paper">
+                    </button>
+                    <button class="computer game-button scissors" id="computer-Scissors">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="result-sentence"></div>
+    </div>
+</body>
+
+<audio id="victory-button-sound" src="./audio/buttonClick.wav"></audio>
+<audio id="loss-button-sound" src="./audio/robotClick.wav"></audio>
+<audio id="draw-button-sound" src="./audio/drawClick.wav"></audio>
+<audio id="victory-sound" src="./audio/victoryAudio.wav"></audio>
+<audio id="loss-sound" src="./audio/gameOverAudio.wav"></audio>
+
+
+
+
 </html>
