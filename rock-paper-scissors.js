@@ -1,6 +1,60 @@
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  } 
+import { winnerImageChange, resultsDisplay, winnerDisplay, pointsAddition, capitalizeFirstLetter } from './modules/helpers.js';
+
+function imageChange(user){
+    if (user.id === "player" && user.dataset.points !== "5"){
+        const playerImage = document.querySelector('.player-image');
+        const computerImage= document.querySelector('.robot-image');
+        playerImage.src = './images/playerHappy.jpg';
+        computerImage.src = './images/robotSad.png';
+    }
+
+    if (user.id === 'computer' && user.dataset.points !== "5"){
+        const playerImage = document.querySelector('.player-image');
+        const computerImage= document.querySelector('.robot-image');
+        playerImage.src = './images/playerSad.jpg';
+        computerImage.src = './images/robotHappy.png';
+    }
+}
+
+function imageReset(){
+    const playerImage = document.querySelector('.player-image');
+    const computerImage = document.querySelector('.robot-image');
+    playerImage.src = './images/playerNormal.jpg';
+    computerImage.src = './images/robotNormal.png';
+}
+
+// Reset points to 0
+const resetPoints = (user) => {
+    user.dataset.points = "0";
+    user.textContent = `${capitalizeFirstLetter(user.id)}: ${user.dataset.points}`
+}
+
+const resetGame = function(user, opponent){
+
+        let resetButton = document.createElement('button');
+        const results = document.querySelector('.results');
+        const gameButtons = document.querySelectorAll('.game-button');
+        resetButton.textContent = 'Want to play again?';
+        gameButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.remove('clicked');
+        });       
+        resetButton.classList.add('resetButton');
+        results.appendChild(resetButton);
+        resetButton.addEventListener('click', function(){
+            resetPoints(user);
+            resetPoints(opponent);
+            resetButton.remove();
+            imageReset();
+            gameButtons.forEach(button => {
+                button.disabled = false;
+            });
+            if (document.querySelector('.clicked')){
+                gameButtons.forEach(button => button.classList.remove('clicked'));
+            }
+            winnerDisplay('');
+        })
+    }
 
 function computerPlay () {
     const choices = ['Rock', 'Paper', 'Scissors']
@@ -8,43 +62,6 @@ function computerPlay () {
 
     return choices[randomIndex]
 }
-
-// Function to show the results of a round on the screen
-const resultsDisplay = (result, selection1, selection2) => {
-    if (document.querySelector('p')){
-        const div = document.querySelector('.result-sentence');
-        let old_results = document.querySelector('p');
-        let results = document.createElement('p');
-        results.textContent = `You ${result}! ${selection1} beats ${selection2}`;
-        div.replaceChild(results, old_results);
-    }
-    else{
-        const div = document.querySelector('.result-sentence');
-        let results = document.createElement('p');
-        results.textContent = `You ${result}! ${selection1} beats ${selection2}`;
-        div.appendChild(results);
-    } 
-}
-
-// Function to display the winner of a game on screen
-const winnerDisplay = (textContent) => {
-    const div = document.querySelector('.result-sentence');
-    const oldResult = document.querySelector('p')
-    let finalResult = document.createElement('p');
-    finalResult.textContent = textContent;
-    div.replaceChild(finalResult, oldResult);
-}
-
-const pointsAddition = (user) => {
-    user.dataset.points = parseInt(user.dataset.points) + 1;
-    user.textContent = `${capitalizeFirstLetter(user.id)} Score: ${user.dataset.points}`
-}
-
-const resetPoints = (user) => {
-    user.dataset.points = "0";
-    user.textContent = `${capitalizeFirstLetter(user.id)} Score: ${user.dataset.points}`
-}
-
 
 
 function playRound (playerSelection, computerSelection) {
@@ -85,6 +102,10 @@ function playRound (playerSelection, computerSelection) {
             let results = document.createElement('p');
             results.textContent = `A draw! You both picked ${computerSelection}`
             div.replaceChild(results, old_results);
+            const playerImage = document.querySelector('.player-image');
+            const computerImage= document.querySelector('.robot-image');
+            playerImage.src = './images/playerDraw.jpg';
+            computerImage.src = './images/robotDraw.png';
 
         }
         else{
@@ -98,32 +119,74 @@ function playRound (playerSelection, computerSelection) {
 
 function game(user, opponent){
     pointsAddition(user);
+    imageChange(user);
     
     if (user.dataset.points === "5" && user.id === "player"){
         winnerDisplay('Congrats! You defeated the Computer!');
-        resetPoints(user);
-        resetPoints(opponent);
+        winnerImageChange(user);
+        resetGame(user, opponent);
+        
+        
     }
 
     else if (user.dataset.points === "5" && user.id ==="computer"){
-        winnerDisplay('You lost. I guess the Computer was too good...');
-        resetPoints(user);
-        resetPoints(opponent);
+        winnerDisplay('Sorry, you lost. Better luck next time...');
+        winnerImageChange(user);
+        resetGame(user, opponent);
+        
     }
 }
 
-document.addEventListener('click', function(event){
+window.addEventListener('click', function(event){
+
+    if (!event.target.id) return;
+
+    if (document.querySelector('.clicked')){
+        document.querySelectorAll('.game-button').forEach(button => button.classList.remove('clicked'));
+    }
+
     let playerSelection = event.target.id;
     let computerSelection = computerPlay();
 
+
     const roundResult = playRound(playerSelection, computerSelection);
-    console.log(roundResult)
 
     let player = document.querySelector('#player');
     let computer = document.querySelector('#computer');
+    const winAudio = document.querySelector('#victory-button-sound');
+    const lossAudio = document.querySelector('#loss-button-sound');
+    const drawAudio = document.querySelector('#draw-button-sound');
+    const victoryAudio = document.querySelector('#victory-sound');
+    const gameOverAudio = document.querySelector('#loss-sound');
 
     if (roundResult === true) game(player, computer);
     else if (roundResult === false) game(computer, player);
-    
+
+    const playerButton = document.querySelector(`#${playerSelection}`);
+
+    if (playerButton.id.startsWith('computer') || playerButton.id.startsWith('player')) return;
+
+    const computerButton = document.querySelector(`#computer-${computerSelection}`);
+
+    playerButton.classList.add('clicked');
+    computerButton.classList.add('clicked');
+
+    if (player.dataset.points === '5' || computer.dataset.points === '5'){
+        if (roundResult === true) victoryAudio.play();
+        if (roundResult === false) gameOverAudio.play();
+    }
+    else if (roundResult === true)
+    {
+    winAudio.currentTime = 0;
+    winAudio.play();
+    }
+    else if (roundResult === false){
+        lossAudio.currentTime = 0;
+        lossAudio.play();
+    }
+    else{
+        drawAudio.currentTime = 0;
+        drawAudio.play();
+    }
     
 })
